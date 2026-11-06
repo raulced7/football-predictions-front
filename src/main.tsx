@@ -9,19 +9,19 @@ import '@fontsource-variable/inter';
 import '@fontsource-variable/space-grotesk';
 
 const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      staleTime: 30_000,
+    defaultOptions: {
+        queries: {
+            retry: 1,
+            staleTime: 30_000,
+        },
     },
-  },
 });
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  </StrictMode>,
+    <StrictMode>
+        <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+            <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+    </StrictMode>,
 );

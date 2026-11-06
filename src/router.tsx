@@ -7,25 +7,25 @@ import { ProfilePage } from './pages/ProfilePage';
 import { RegisterPage } from './pages/RegisterPage';
 
 export const router = createBrowserRouter([
-  {
-    element: <RedirectIfAuthenticated />,
-    children: [
-      { path: '/login', element: <LoginPage /> },
-      { path: '/registro', element: <RegisterPage /> },
-    ],
-  },
-  {
-    element: <RequireAuth />,
-    children: [
-      {
-        element: <AppLayout />,
+    {
+        element: <RedirectIfAuthenticated />,
         children: [
-          { path: '/', element: <PlaceholderPage title="Jornada" /> },
-          { path: '/grupos', element: <PlaceholderPage title="Mis grupos" /> },
-          { path: '/perfil', element: <ProfilePage /> },
+            { path: '/login', element: <LoginPage /> },
+            { path: '/registro', element: <RegisterPage /> },
         ],
-      },
-    ],
-  },
-  { path: '*', element: <Navigate to="/" replace /> },
+    },
+    {
+        element: <RequireAuth />,
+        children: [
+            {
+                element: <AppLayout />,
+                children: [
+                    { path: '/', element: <PlaceholderPage title="Jornada" /> },
+                    { path: '/grupos', element: <PlaceholderPage title="Mis grupos" /> },
+                    { path: '/perfil', element: <ProfilePage /> },
+                ],
+            },
+        ],
+    },
+    { path: '*', element: <Navigate to="/" replace /> },
 ]);
