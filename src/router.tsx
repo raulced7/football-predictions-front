@@ -1,6 +1,10 @@
 import { createBrowserRouter, Navigate } from 'react-router';
 import { RedirectIfAuthenticated, RequireAuth } from './features/auth/RequireAuth';
 import { AppLayout } from './layouts/AppLayout';
+import { GroupsPage } from './pages/GroupsPage';
+import { GroupInfoPage } from './pages/group/GroupInfoPage';
+import { GroupLayout } from './pages/group/GroupLayout';
+import { JoinGroupPage } from './pages/JoinGroupPage';
 import { LoginPage } from './pages/LoginPage';
 import { PlaceholderPage } from './pages/PlaceholderPage';
 import { ProfilePage } from './pages/ProfilePage';
@@ -18,11 +22,28 @@ export const router = createBrowserRouter([
     {
         element: <RequireAuth />,
         children: [
+            { path: '/unirse/:inviteCode', element: <JoinGroupPage /> },
             {
                 element: <AppLayout />,
                 children: [
                     { path: '/', element: <RoundPage /> },
-                    { path: '/grupos', element: <PlaceholderPage title="Mis grupos" /> },
+                    { path: '/grupos', element: <GroupsPage /> },
+                    {
+                        path: '/grupos/:groupId',
+                        element: <GroupLayout />,
+                        children: [
+                            { index: true, element: <Navigate to="clasificacion" replace /> },
+                            {
+                                path: 'clasificacion',
+                                element: <PlaceholderPage title="Clasificación" />,
+                            },
+                            {
+                                path: 'pronosticos',
+                                element: <PlaceholderPage title="Pronósticos" />,
+                            },
+                            { path: 'grupo', element: <GroupInfoPage /> },
+                        ],
+                    },
                     { path: '/perfil', element: <ProfilePage /> },
                 ],
             },
