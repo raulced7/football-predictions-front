@@ -1,7 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../../api/client';
 import { toApiError } from '../../api/errors';
-import { toGroup, toGroupDetail, toStandings } from './model';
+import {
+    toFixturePredictions,
+    toGroup,
+    toGroupDetail,
+    toStandings,
+    type FixturePredictions,
+} from './model';
 
 export function useMyGroups() {
     return useQuery({
@@ -36,6 +42,45 @@ export function useGroupStandings(groupId: number) {
             });
             if (error || !data) throw toApiError(error, response);
             return toStandings(data);
+        },
+    });
+}
+
+export function useGroupRoundStandings(groupId: number, roundId: number | undefined) {
+    return useQuery({
+        queryKey: ['groups', groupId, 'standings', 'round', roundId],
+        enabled: roundId != null,
+        queryFn: async () => {
+            const { data, error, response } = await api.GET(
+                '/api/groups/{groupId}/standings/rounds/{roundId}',
+                {
+                    params: { path: { groupId, roundId: roundId! } },
+                },
+            );
+            if (error || !data) throw toApiError(error, response);
+            return toStandings(data);
+        },
+    });
+}
+
+export function useGroupRoundPredictions(groupId: number, roundId: number | undefined) {
+    return useQuery({
+        queryKey: ['groups', groupId, 'predictions', roundId],
+        enabled: roundId != null,
+        refetchInterval: (query) =>
+            query.state.data?.some((item) => item.match.status === 'LIVE') ? 60_000 : false,
+        queryFn: async () => {
+            const { data, error, response } = await api.GET(
+                '/api/groups/{groupId}/rounds/{roundId}/predictions',
+                {
+                    params: { path: { groupId, roundId: roundId! } },
+                },
+            );
+            if (error || !data) throw toApiError(error, response);
+            return data
+                .map(toFixturePredictions)
+                .filter((item): item is FixturePredictions => item !== null)
+                .sort((a, b) => a.match.kickoffAt.getTime() - b.match.kickoffAt.getTime());
         },
     });
 }

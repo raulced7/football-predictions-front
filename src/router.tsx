@@ -6,10 +6,11 @@ import { GroupInfoPage } from './pages/group/GroupInfoPage';
 import { GroupLayout } from './pages/group/GroupLayout';
 import { JoinGroupPage } from './pages/JoinGroupPage';
 import { LoginPage } from './pages/LoginPage';
-import { PlaceholderPage } from './pages/PlaceholderPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { RegisterPage } from './pages/RegisterPage';
 import { RoundPage } from './pages/RoundPage';
+import { GroupPredictionsPage } from './pages/group/GroupPredictionsPage';
+import { GroupStandingsPage } from './pages/group/GroupStandingsPage';
 
 export const router = createBrowserRouter([
     {
@@ -33,14 +34,8 @@ export const router = createBrowserRouter([
                         element: <GroupLayout />,
                         children: [
                             { index: true, element: <Navigate to="clasificacion" replace /> },
-                            {
-                                path: 'clasificacion',
-                                element: <PlaceholderPage title="Clasificación" />,
-                            },
-                            {
-                                path: 'pronosticos',
-                                element: <PlaceholderPage title="Pronósticos" />,
-                            },
+                            { path: 'clasificacion', element: <GroupStandingsPage /> },
+                            { path: 'pronosticos', element: <GroupPredictionsPage /> },
                             { path: 'grupo', element: <GroupInfoPage /> },
                         ],
                     },
