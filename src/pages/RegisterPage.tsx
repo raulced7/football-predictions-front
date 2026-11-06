@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'react-router';
 import { z } from 'zod';
@@ -23,10 +23,11 @@ export function RegisterPage() {
     const {
         register,
         handleSubmit,
-        watch,
+        control,
         formState: { errors },
     } = useForm<RegisterForm>({ resolver: zodResolver(registerSchema) });
-    const availability = useDisplayNameAvailability(watch('displayName') ?? '');
+    const displayName = useWatch({ control, name: 'displayName' }) ?? '';
+    const availability = useDisplayNameAvailability(displayName);
 
     return (
         <main className="mx-auto flex min-h-dvh max-w-md flex-col justify-between px-6 pt-12 pb-8">
