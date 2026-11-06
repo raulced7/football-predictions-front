@@ -5,6 +5,7 @@ import { LoginPage } from './pages/LoginPage';
 import { PlaceholderPage } from './pages/PlaceholderPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { RegisterPage } from './pages/RegisterPage';
+import { RoundPage } from './pages/RoundPage';
 
 export const router = createBrowserRouter([
     {
@@ -20,7 +21,7 @@ export const router = createBrowserRouter([
             {
                 element: <AppLayout />,
                 children: [
-                    { path: '/', element: <PlaceholderPage title="Jornada" /> },
+                    { path: '/', element: <RoundPage /> },
                     { path: '/grupos', element: <PlaceholderPage title="Mis grupos" /> },
                     { path: '/perfil', element: <ProfilePage /> },
                 ],
