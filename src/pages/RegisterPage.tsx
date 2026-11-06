@@ -6,13 +6,12 @@ import { Button } from '../components/Buttons';
 import { TextField } from '../components/TextField';
 import { getErrorMessage } from '../api/errors';
 import { useRegister } from '../features/auth/api';
+import { PasswordField } from '../components/PasswordField';
+import { displayNameSchema, useDisplayNameAvailability } from '../features/auth/displayName';
+import { DisplayNameHint } from '../features/auth/DisplayNameHint';
 
 const registerSchema = z.object({
-  displayName: z
-    .string()
-    .trim()
-    .min(1, 'Elige un nombre para que te reconozcan')
-    .max(50, 'Máximo 50 caracteres'),
+  displayName: displayNameSchema,
   email: z.email('Introduce un email válido').max(255),
   password: z.string().min(8, 'Mínimo 8 caracteres').max(72, 'Máximo 72 caracteres'),
 });
@@ -24,8 +23,10 @@ export function RegisterPage() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<RegisterForm>({ resolver: zodResolver(registerSchema) });
+  const availability = useDisplayNameAvailability(watch('displayName') ?? '');
 
   return (
     <main className="mx-auto flex min-h-dvh max-w-md flex-col justify-between px-6 pt-12 pb-8">
@@ -45,10 +46,11 @@ export function RegisterPage() {
           className="flex flex-col gap-4"
         >
           <TextField
-            label="Nombre"
-            autoComplete="nickname"
-            placeholder="Cómo te verán en el grupo"
+            label="Nombre de usuario"
+            autoComplete="username"
+            placeholder="Cómo te verán en los grupos"
             error={errors.displayName?.message}
+            hint={<DisplayNameHint status={availability} />}
             {...register('displayName')}
           />
           <TextField
@@ -59,11 +61,10 @@ export function RegisterPage() {
             error={errors.email?.message}
             {...register('email')}
           />
-          <TextField
+          <PasswordField
             label="Contraseña"
-            type="password"
-            autoComplete="new-password"
-            placeholder="Mínimo 8 caracteres"
+            autoComplete="current-password"
+            placeholder="Tu contraseña"
             error={errors.password?.message}
             {...register('password')}
           />
@@ -72,7 +73,12 @@ export function RegisterPage() {
               {getErrorMessage(registerUser.error)}
             </p>
           )}
-          <Button type="submit" loading={registerUser.isPending} className="mt-1 h-13.5">
+          <Button
+            type="submit"
+            loading={registerUser.isPending}
+            disabled={availability === 'taken'}
+            className="mt-1 h-13.5"
+          >
             Crear cuenta
           </Button>
         </form>

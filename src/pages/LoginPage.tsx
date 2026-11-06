@@ -7,6 +7,7 @@ import { TextField } from '../components/TextField';
 import { BallIcon } from '../components/icons';
 import { getErrorMessage } from '../api/errors';
 import { useLogin } from '../features/auth/api';
+import { PasswordField } from '../components/PasswordField';
 
 const loginSchema = z.object({
   email: z.email('Introduce un email válido'),
@@ -53,9 +54,8 @@ export function LoginPage() {
             error={errors.email?.message}
             {...register('email')}
           />
-          <TextField
+          <PasswordField
             label="Contraseña"
-            type="password"
             autoComplete="current-password"
             placeholder="Tu contraseña"
             error={errors.password?.message}
