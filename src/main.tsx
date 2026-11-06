@@ -7,6 +7,7 @@ import { router } from './router';
 import './index.css';
 import '@fontsource-variable/inter';
 import '@fontsource-variable/space-grotesk';
+import { UpdatePrompt } from './features/pwa/UpdatePrompt';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -21,6 +22,7 @@ createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <QueryClientProvider client={queryClient}>
             <RouterProvider router={router} />
+            <UpdatePrompt />
             <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
     </StrictMode>,

@@ -2,6 +2,7 @@ import { Button } from '../components/Buttons';
 import { getErrorMessage } from '../api/errors';
 import { useLogout } from '../features/auth/api';
 import { useMe } from '../features/users/api';
+import { InstallCard } from '../features/pwa/InstallCard';
 
 export function ProfilePage() {
     const me = useMe();
@@ -23,6 +24,10 @@ export function ProfilePage() {
                     </>
                 )}
             </section>
+
+            <InstallCard />
+
+            <Button variant="danger" onClick={logout}></Button>
 
             <Button variant="danger" onClick={logout}>
                 Cerrar sesión
