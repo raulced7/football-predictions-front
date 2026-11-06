@@ -1,5 +1,27 @@
 @import 'tailwindcss';
 
+@theme {
+  --font-sans: 'Inter Variable', system-ui, sans-serif;
+  --font-display: 'Space Grotesk Variable', system-ui, sans-serif;
+
+  --color-ink: #0a0e1a;
+  --color-surface: #131a2b;
+  --color-surface-2: #1c2438;
+  --color-line: #2a3350;
+  --color-line-soft: #1f2740;
+  --color-fg: #f2f5fa;
+  --color-muted: #9aa4bc;
+  --color-subtle: #6f7a96;
+  --color-lime: #c8f135;
+  --color-lime-soft: #ddfa6e;
+  --color-violet: #9d8cff;
+  --color-coral: #ff6a55;
+}
+
+html {
+  color-scheme: dark;
+}
+
 body {
-  @apply bg-slate-50 text-slate-900 antialiased;
+  @apply bg-ink text-fg font-sans antialiased;
 }

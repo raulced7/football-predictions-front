@@ -5,6 +5,8 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RouterProvider } from 'react-router/dom';
 import { router } from './router';
 import './index.css';
+import '@fontsource-variable/inter';
+import '@fontsource-variable/space-grotesk';
 
 const queryClient = new QueryClient({
   defaultOptions: {
