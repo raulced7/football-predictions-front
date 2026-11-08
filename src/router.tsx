@@ -1,48 +1,106 @@
 import { createBrowserRouter, Navigate } from 'react-router';
+import { AppLoader } from './components/AppLoader';
 import { RedirectIfAuthenticated, RequireAuth } from './features/auth/RequireAuth';
 import { AppLayout } from './layouts/AppLayout';
-import { GroupsPage } from './pages/GroupsPage';
-import { GroupInfoPage } from './pages/group/GroupInfoPage';
 import { GroupLayout } from './pages/group/GroupLayout';
-import { JoinGroupPage } from './pages/JoinGroupPage';
-import { LoginPage } from './pages/LoginPage';
-import { ProfilePage } from './pages/ProfilePage';
-import { RegisterPage } from './pages/RegisterPage';
-import { RoundPage } from './pages/RoundPage';
-import { GroupPredictionsPage } from './pages/group/GroupPredictionsPage';
-import { GroupStandingsPage } from './pages/group/GroupStandingsPage';
 
+// Cada página se descarga la primera vez que se visita, no al abrir la app.
+// Los layouts se quedan en el paquete principal porque se necesitan siempre.
 export const router = createBrowserRouter([
     {
-        element: <RedirectIfAuthenticated />,
+        HydrateFallback: AppLoader,
         children: [
-            { path: '/login', element: <LoginPage /> },
-            { path: '/registro', element: <RegisterPage /> },
-        ],
-    },
-    {
-        element: <RequireAuth />,
-        children: [
-            { path: '/unirse/:inviteCode', element: <JoinGroupPage /> },
             {
-                element: <AppLayout />,
+                element: <RedirectIfAuthenticated />,
                 children: [
-                    { path: '/', element: <RoundPage /> },
-                    { path: '/grupos', element: <GroupsPage /> },
                     {
-                        path: '/grupos/:groupId',
-                        element: <GroupLayout />,
-                        children: [
-                            { index: true, element: <Navigate to="clasificacion" replace /> },
-                            { path: 'clasificacion', element: <GroupStandingsPage /> },
-                            { path: 'pronosticos', element: <GroupPredictionsPage /> },
-                            { path: 'grupo', element: <GroupInfoPage /> },
-                        ],
+                        path: '/login',
+                        lazy: () =>
+                            import('./pages/LoginPage').then((m) => ({ Component: m.LoginPage })),
                     },
-                    { path: '/perfil', element: <ProfilePage /> },
+                    {
+                        path: '/registro',
+                        lazy: () =>
+                            import('./pages/RegisterPage').then((m) => ({
+                                Component: m.RegisterPage,
+                            })),
+                    },
                 ],
             },
+            {
+                element: <RequireAuth />,
+                children: [
+                    {
+                        path: '/unirse/:inviteCode',
+                        lazy: () =>
+                            import('./pages/JoinGroupPage').then((m) => ({
+                                Component: m.JoinGroupPage,
+                            })),
+                    },
+                    {
+                        element: <AppLayout />,
+                        children: [
+                            {
+                                path: '/',
+                                lazy: () =>
+                                    import('./pages/RoundPage').then((m) => ({
+                                        Component: m.RoundPage,
+                                    })),
+                            },
+                            {
+                                path: '/grupos',
+                                lazy: () =>
+                                    import('./pages/GroupsPage').then((m) => ({
+                                        Component: m.GroupsPage,
+                                    })),
+                            },
+                            {
+                                path: '/grupos/:groupId',
+                                element: <GroupLayout />,
+                                children: [
+                                    {
+                                        index: true,
+                                        element: <Navigate to="clasificacion" replace />,
+                                    },
+                                    {
+                                        path: 'clasificacion',
+                                        lazy: () =>
+                                            import('./pages/group/GroupStandingsPage').then(
+                                                (m) => ({
+                                                    Component: m.GroupStandingsPage,
+                                                }),
+                                            ),
+                                    },
+                                    {
+                                        path: 'pronosticos',
+                                        lazy: () =>
+                                            import('./pages/group/GroupPredictionsPage').then(
+                                                (m) => ({
+                                                    Component: m.GroupPredictionsPage,
+                                                }),
+                                            ),
+                                    },
+                                    {
+                                        path: 'grupo',
+                                        lazy: () =>
+                                            import('./pages/group/GroupInfoPage').then((m) => ({
+                                                Component: m.GroupInfoPage,
+                                            })),
+                                    },
+                                ],
+                            },
+                            {
+                                path: '/perfil',
+                                lazy: () =>
+                                    import('./pages/ProfilePage').then((m) => ({
+                                        Component: m.ProfilePage,
+                                    })),
+                            },
+                        ],
+                    },
+                ],
+            },
+            { path: '*', element: <Navigate to="/" replace /> },
         ],
     },
-    { path: '*', element: <Navigate to="/" replace /> },
 ]);
