@@ -2,6 +2,7 @@ import type { components } from '../../api/schema';
 
 type RoundPredictionItem = components['schemas']['RoundPredictionItem'];
 type RoundResponse = components['schemas']['RoundResponse'];
+type TeamResponse = components['schemas']['TeamResponse'];
 
 export type FixtureStatus = NonNullable<components['schemas']['FixtureResponse']['status']>;
 
@@ -11,10 +12,19 @@ export interface Prediction {
     points: number | null;
 }
 
+export interface Team {
+    id: number;
+    /** Nombre corto si lo hay ("Barça"); si no, el nombre completo. Es el que se muestra en pantalla. */
+    name: string;
+    /** Siglas: "FCB", o calculadas a partir del nombre si el proveedor no las da. */
+    code: string;
+    crestUrl: string | null;
+}
+
 export interface Match {
     id: number;
-    homeTeam: string;
-    awayTeam: string;
+    homeTeam: Team;
+    awayTeam: Team;
     kickoffAt: Date;
     kickoffConfirmed: boolean;
     status: FixtureStatus;
@@ -32,15 +42,22 @@ export interface Round {
     startsAt: Date | null;
 }
 
+export function toTeam(team: TeamResponse | undefined): Team | null {
+    if (team?.id == null || !team.name) return null;
+    const name = team.shortName || team.name;
+    return {
+        id: team.id,
+        name,
+        code: team.tla || teamCode(name),
+        crestUrl: team.crestUrl || null,
+    };
+}
+
 export function toMatch(item: RoundPredictionItem): Match | null {
     const fixture = item.fixture;
-    if (
-        !fixture?.id ||
-        !fixture.homeTeam ||
-        !fixture.awayTeam ||
-        !fixture.kickoffAt ||
-        !fixture.status
-    ) {
+    const homeTeam = toTeam(fixture?.homeTeam);
+    const awayTeam = toTeam(fixture?.awayTeam);
+    if (!fixture?.id || !homeTeam || !awayTeam || !fixture.kickoffAt || !fixture.status) {
         return null;
     }
 
@@ -52,8 +69,8 @@ export function toMatch(item: RoundPredictionItem): Match | null {
 
     return {
         id: fixture.id,
-        homeTeam: fixture.homeTeam,
-        awayTeam: fixture.awayTeam,
+        homeTeam,
+        awayTeam,
         kickoffAt: new Date(fixture.kickoffAt),
         kickoffConfirmed: fixture.kickoffConfirmed ?? false,
         status: fixture.status,

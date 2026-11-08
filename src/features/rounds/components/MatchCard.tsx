@@ -3,7 +3,7 @@ import { Check, LoaderCircle, Lock } from 'lucide-react';
 import { TeamBadge } from '../../../components/TeamBadge';
 import { getErrorMessage } from '../../../api/errors';
 import { useSavePrediction } from '../api';
-import type { Match } from '../model';
+import type { Match, Team as TeamModel } from '../model';
 import { PointsBadge } from './PointsBadge';
 import { ScoreSelect } from './ScoreSelect';
 import { StatusPill } from './StatusPill';
@@ -57,17 +57,17 @@ export function MatchCard({ match, roundId }: MatchCardProps) {
             </div>
 
             <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2">
-                <Team name={match.homeTeam} />
+                <Team team={match.homeTeam} />
                 {match.open ? (
                     <div className="flex items-center gap-2">
                         <ScoreSelect
-                            label={`Goles ${match.homeTeam}`}
+                            label={`Goles ${match.homeTeam.name}`}
                             value={home}
                             onChange={(value) => update(value, away)}
                         />
                         <span className="text-muted font-bold">–</span>
                         <ScoreSelect
-                            label={`Goles ${match.awayTeam}`}
+                            label={`Goles ${match.awayTeam.name}`}
                             value={away}
                             onChange={(value) => update(home, value)}
                         />
@@ -84,7 +84,7 @@ export function MatchCard({ match, roundId }: MatchCardProps) {
                         </span>
                     </div>
                 )}
-                <Team name={match.awayTeam} />
+                <Team team={match.awayTeam} />
             </div>
 
             {save.isError && (
@@ -96,11 +96,11 @@ export function MatchCard({ match, roundId }: MatchCardProps) {
     );
 }
 
-function Team({ name }: { name: string }) {
+function Team({ team }: { team: TeamModel }) {
     return (
         <div className="flex min-w-0 flex-col items-center gap-1.5">
-            <TeamBadge name={name} />
-            <span className="max-w-full truncate text-sm font-semibold">{name}</span>
+            <TeamBadge team={team} />
+            <span className="max-w-full truncate text-sm font-semibold">{team.name}</span>
         </div>
     );
 }

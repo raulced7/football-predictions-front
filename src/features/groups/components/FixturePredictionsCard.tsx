@@ -3,6 +3,7 @@ import { Lock } from 'lucide-react';
 import { PointsBadge } from '../../rounds/components/PointsBadge';
 import { StatusPill } from '../../rounds/components/StatusPill';
 import type { FixturePredictions } from '../model';
+import { TeamBadge } from '../../../components/TeamBadge';
 
 const VISIBLE_PREDICTIONS = 5;
 
@@ -32,14 +33,16 @@ export function FixturePredictionsCard({
     return (
         <article className="border-line-soft bg-surface overflow-hidden rounded-2xl border">
             <div className="bg-surface-2 flex items-center justify-between gap-3 px-3.5 py-3">
-                <span className="min-w-0 truncate text-sm font-semibold">
-                    {match.homeTeam}
+                <span className="flex min-w-0 items-center gap-1.5 text-sm font-semibold">
+                    <TeamBadge team={match.homeTeam} size="sm" />
+                    <span className="truncate">{match.homeTeam.name}</span>
                     <span
-                        className={`font-display mx-1.5 font-bold ${hasResult ? '' : 'text-muted'}`}
+                        className={`font-display shrink-0 font-bold ${hasResult ? '' : 'text-muted'}`}
                     >
                         {hasResult ? `${match.homeGoals} – ${match.awayGoals}` : 'vs'}
                     </span>
-                    {match.awayTeam}
+                    <span className="truncate">{match.awayTeam.name}</span>
+                    <TeamBadge team={match.awayTeam} size="sm" />
                 </span>
                 <StatusPill match={match} />
             </div>

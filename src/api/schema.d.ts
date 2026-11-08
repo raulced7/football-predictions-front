@@ -407,8 +407,8 @@ export interface components {
             roundName?: string;
             /** Format: int64 */
             scoringRoundId?: number;
-            homeTeam?: string;
-            awayTeam?: string;
+            homeTeam?: components["schemas"]["TeamResponse"];
+            awayTeam?: components["schemas"]["TeamResponse"];
             /** Format: date-time */
             kickoffAt?: string;
             kickoffConfirmed?: boolean;
@@ -418,6 +418,14 @@ export interface components {
             homeGoals?: number;
             /** Format: int32 */
             awayGoals?: number;
+        };
+        TeamResponse: {
+            /** Format: int64 */
+            id?: number;
+            name?: string;
+            shortName?: string;
+            tla?: string;
+            crestUrl?: string;
         };
         SetResultRequest: {
             /** Format: int32 */
