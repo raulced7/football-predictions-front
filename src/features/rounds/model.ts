@@ -63,7 +63,9 @@ export function toMatch(item: RoundPredictionItem): Match | null {
 
     const prediction = item.prediction;
     const movedFrom =
-        fixture.roundId !== fixture.scoringRoundId && fixture.roundName
+        fixture.roundId !== fixture.scoringRoundId &&
+        fixture.roundName &&
+        fixture.status !== 'CANCELLED'
             ? fixture.roundName.replace(/^Jornada\s+/i, 'J')
             : null;
 

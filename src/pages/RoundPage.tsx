@@ -1,32 +1,18 @@
-import { useSearchParams } from 'react-router';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '../components/Buttons';
 import { getErrorMessage } from '../api/errors';
-import { useMyRound, useOpenSeasons, useSeasonRounds } from '../features/rounds/api';
+import { useMyRound, useOpenSeasons } from '../features/rounds/api';
 import { MatchCard } from '../features/rounds/components/MatchCard';
 import { RoundSummary } from '../features/rounds/components/RoundSummary';
 import { dayKey, formatDateRange, formatDay } from '../features/rounds/format';
-import { pickCurrentRound, type Match } from '../features/rounds/model';
+import type { Match } from '../features/rounds/model';
+import { useSelectedRound } from '../features/rounds/useSelectedRound';
 
 export function RoundPage() {
     const seasons = useOpenSeasons();
     const season = seasons.data?.[0];
-    const rounds = useSeasonRounds(season?.id);
-
-    const [searchParams, setSearchParams] = useSearchParams();
-    const requestedSequence = Number(searchParams.get('jornada'));
-    const round =
-        rounds.data?.find((candidate) => candidate.sequence === requestedSequence) ??
-        (rounds.data ? pickCurrentRound(rounds.data) : undefined);
-
+    const { rounds, round, goToRound, firstSequence, lastSequence } = useSelectedRound(season?.id);
     const matches = useMyRound(round?.id);
-
-    const firstSequence = rounds.data?.[0]?.sequence ?? 1;
-    const lastSequence = rounds.data?.at(-1)?.sequence ?? 1;
-
-    function goToRound(sequence: number) {
-        setSearchParams({ jornada: String(sequence) });
-    }
 
     if (seasons.isError || rounds.isError) {
         return (
