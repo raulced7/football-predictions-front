@@ -1,0 +1,38 @@
+# Railway termina el HTTPS y nos pasa el tráfico por HTTP al puerto que indica en $PORT.
+
+{
+admin off
+}
+
+:{$PORT:80} {
+encode zstd gzip
+
+    header {
+    	Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    	X-Content-Type-Options nosniff
+    	X-Frame-Options DENY
+    	Referrer-Policy strict-origin-when-cross-origin
+    	-Server
+    }
+
+    # La API va al backend por la red privada de Railway; el resto es el front
+    handle /api/* {
+    	reverse_proxy {$API_UPSTREAM}
+    }
+
+    handle {
+    	root * /srv
+
+    	# Los archivos de /assets llevan un hash en el nombre: se pueden guardar para siempre.
+    	# El resto (index.html, sw.js, manifest…) se revalida siempre, para que las versiones nuevas lleguen.
+    	@assets path /assets/*
+    	header @assets Cache-Control "public, max-age=31536000, immutable"
+    	@notAssets not path /assets/*
+    	header @notAssets Cache-Control "no-cache"
+
+    	# Rutas de la app (/grupos/3…): se sirve index.html y el router de React hace el resto
+    	try_files {path} /index.html
+    	file_server
+    }
+
+}
