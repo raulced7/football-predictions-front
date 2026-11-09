@@ -36,9 +36,6 @@ export function RegisterPage() {
                     <h1 className="font-display text-[34px] leading-tight font-bold tracking-tight">
                         Crea tu cuenta
                     </h1>
-                    <p className="text-muted text-[15px] leading-relaxed">
-                        Únete a la porra de tus amigos en menos de un minuto.
-                    </p>
                 </div>
 
                 <form

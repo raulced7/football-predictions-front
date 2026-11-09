@@ -14,9 +14,9 @@ export default defineConfig({
                 overrideManifestIcons: true,
             },
             manifest: {
-                name: 'Football Predictions',
-                short_name: 'Porra',
-                description: 'La porra de LaLiga con tus amigos',
+                name: 'Golify',
+                short_name: 'Golify',
+                description: 'La liga de pronosticos con tus amigos',
                 lang: 'es',
                 start_url: '/',
                 scope: '/',

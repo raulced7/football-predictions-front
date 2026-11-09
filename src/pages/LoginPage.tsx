@@ -33,7 +33,7 @@ export function LoginPage() {
                     </div>
                     <div className="flex flex-col gap-2">
                         <h1 className="font-display text-[34px] leading-tight font-bold tracking-tight">
-                            La porra de tu grupo, jornada a jornada
+                            Golify
                         </h1>
                         <p className="text-muted text-[15px] leading-relaxed">
                             Pronostica cada partido, suma puntos y presume de clasificación.
