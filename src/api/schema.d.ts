@@ -84,6 +84,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/auth/verify-email": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["verifyEmail"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/auth/verify-email/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["resendVerificationCode"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/auth/register": {
         parameters: {
             query?: never;
@@ -456,6 +488,21 @@ export interface components {
         JoinGroupRequest: {
             inviteCode: string;
         };
+        VerifyEmailRequest: {
+            /** Format: email */
+            email: string;
+            code: string;
+        };
+        TokenResponse: {
+            accessToken?: string;
+            tokenType?: string;
+            /** Format: int64 */
+            expiresIn?: number;
+        };
+        ResendCodeRequest: {
+            /** Format: email */
+            email: string;
+        };
         RegisterRequest: {
             /** Format: email */
             email: string;
@@ -471,12 +518,6 @@ export interface components {
         LoginRequest: {
             email: string;
             password: string;
-        };
-        TokenResponse: {
-            accessToken?: string;
-            tokenType?: string;
-            /** Format: int64 */
-            expiresIn?: number;
         };
         SyncReport: {
             /** Format: int32 */
@@ -717,6 +758,52 @@ export interface operations {
                 content: {
                     "*/*": components["schemas"]["GroupResponse"];
                 };
+            };
+        };
+    };
+    verifyEmail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VerifyEmailRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TokenResponse"];
+                };
+            };
+        };
+    };
+    resendVerificationCode: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResendCodeRequest"];
+            };
+        };
+        responses: {
+            /** @description Accepted */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

@@ -25,6 +25,13 @@ export const router = createBrowserRouter([
                                 Component: m.RegisterPage,
                             })),
                     },
+                    {
+                        path: '/verificar',
+                        lazy: () =>
+                            import('./pages/VerifyEmailPage').then((m) => ({
+                                Component: m.VerifyEmailPage,
+                            })),
+                    },
                 ],
             },
             {

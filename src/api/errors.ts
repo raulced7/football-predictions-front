@@ -1,10 +1,12 @@
 export class ApiError extends Error {
     readonly status: number;
+    readonly code?: string;
 
-    constructor(status: number, message: string) {
+    constructor(status: number, message: string, code?: string) {
         super(message);
         this.name = 'ApiError';
         this.status = status;
+        this.code = code;
     }
 }
 
@@ -24,7 +26,18 @@ export function toApiError(error: unknown, response: Response): ApiError {
         typeof error.detail === 'string'
             ? error.detail
             : undefined;
-    return new ApiError(response.status, detail ?? defaultMessage(response.status));
+    const code =
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        typeof error.code === 'string'
+            ? error.code
+            : undefined;
+    return new ApiError(response.status, detail ?? defaultMessage(response.status), code);
+}
+
+export function isEmailNotVerified(error: unknown): boolean {
+    return error instanceof ApiError && error.code === 'EMAIL_NOT_VERIFIED';
 }
 
 export function getErrorMessage(error: unknown): string {

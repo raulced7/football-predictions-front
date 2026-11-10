@@ -1,6 +1,6 @@
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { z } from 'zod';
 import { Button } from '../components/Buttons';
 import { TextField } from '../components/TextField';
@@ -20,6 +20,9 @@ type RegisterForm = z.infer<typeof registerSchema>;
 
 export function RegisterPage() {
     const registerUser = useRegister();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = (location.state as { from?: string } | null)?.from;
     const {
         register,
         handleSubmit,
@@ -40,7 +43,14 @@ export function RegisterPage() {
 
                 <form
                     noValidate
-                    onSubmit={handleSubmit((values) => registerUser.mutate(values))}
+                    onSubmit={handleSubmit((values) =>
+                        registerUser.mutate(values, {
+                            onSuccess: () =>
+                                navigate(`/verificar?email=${encodeURIComponent(values.email)}`, {
+                                    state: { from, justSent: true },
+                                }),
+                        }),
+                    )}
                     className="flex flex-col gap-4"
                 >
                     <TextField
@@ -62,7 +72,7 @@ export function RegisterPage() {
                     <PasswordField
                         label="Contraseña"
                         autoComplete="current-password"
-                        placeholder="Tu contraseña"
+                        placeholder="Mínimo 8 caracteres"
                         error={errors.password?.message}
                         {...register('password')}
                     />
@@ -87,7 +97,11 @@ export function RegisterPage() {
 
             <p className="text-muted mt-8 text-center text-sm">
                 ¿Ya tienes cuenta?{' '}
-                <Link to="/login" className="text-lime hover:text-lime-soft font-semibold">
+                <Link
+                    to="/login"
+                    state={location.state}
+                    className="text-lime hover:text-lime-soft font-semibold"
+                >
                     Entra
                 </Link>
             </p>
