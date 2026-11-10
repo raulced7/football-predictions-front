@@ -21,7 +21,7 @@ export function InviteCodeCard({ group }: { group: Group }) {
             try {
                 await navigator.share({
                     title: `Únete a ${group.name}`,
-                    text: `Únete a mi porra "${group.name}" con el código ${group.inviteCode}`,
+                    text: `Únete al grupo "${group.name}" con el código ${group.inviteCode}`,
                     url: inviteUrl,
                 });
             } catch {

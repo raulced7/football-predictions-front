@@ -1,10 +1,10 @@
 import { NavLink } from 'react-router';
-import { User, Users } from 'lucide-react';
+import { User, UserGroup } from 'lucide-react';
 import { BallIcon } from './icons';
 
 const items = [
     { to: '/', label: 'Jornada', icon: BallIcon, end: true },
-    { to: '/grupos', label: 'Grupos', icon: Users, end: false },
+    { to: '/grupos', label: 'Grupos', icon: UserGroup, end: false },
     { to: '/perfil', label: 'Perfil', icon: User, end: false },
 ];
 
