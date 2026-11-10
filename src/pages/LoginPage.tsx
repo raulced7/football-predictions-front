@@ -23,6 +23,7 @@ export function LoginPage() {
     const {
         register,
         handleSubmit,
+        getValues,
         formState: { errors },
     } = useForm<LoginForm>({ resolver: zodResolver(loginSchema) });
 
@@ -77,6 +78,18 @@ export function LoginPage() {
                         error={errors.password?.message}
                         {...register('password')}
                     />
+                    <button
+                        type="button"
+                        onClick={() =>
+                            navigate(
+                                `/recuperar?email=${encodeURIComponent(getValues('email') ?? '')}`,
+                                { state: location.state },
+                            )
+                        }
+                        className="text-muted hover:text-fg -mt-1 self-end text-[13px] font-semibold"
+                    >
+                        ¿Has olvidado tu contraseña?
+                    </button>
                     {login.isError && !isEmailNotVerified(login.error) && (
                         <p
                             role="alert"

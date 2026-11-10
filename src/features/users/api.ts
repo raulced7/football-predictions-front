@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { api } from '../../api/client';
 import { toApiError } from '../../api/errors';
 
@@ -11,6 +11,17 @@ export function useMe() {
                 throw toApiError(error, response);
             }
             return data;
+        },
+    });
+}
+
+export function useChangePassword() {
+    return useMutation({
+        mutationFn: async (body: { currentPassword: string; newPassword: string }) => {
+            const { error, response } = await api.PUT('/api/users/me/password', { body });
+            if (error || !response.ok) {
+                throw toApiError(error, response);
+            }
         },
     });
 }

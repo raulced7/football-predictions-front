@@ -4,13 +4,16 @@ import { useLogout } from '../features/auth/api';
 import { useMe } from '../features/users/api';
 import { InstallCard } from '../features/pwa/InstallCard';
 import { useState } from 'react';
-import { CircleHelp } from 'lucide-react';
+import { CircleHelp, KeyRound } from 'lucide-react';
 import { InstallGuideSheet } from '../features/pwa/InstallGuideSheet';
+import { ChangePasswordSheet } from '../features/users/components/ChangePasswordSheet';
 
 export function ProfilePage() {
     const me = useMe();
     const logout = useLogout();
     const [guideOpen, setGuideOpen] = useState(false);
+    const [passwordOpen, setPasswordOpen] = useState(false);
+    const [passwordChanged, setPasswordChanged] = useState(false);
 
     return (
         <main className="flex flex-col gap-6 px-5 pt-7">
@@ -31,6 +34,24 @@ export function ProfilePage() {
 
             <InstallCard onShowGuide={() => setGuideOpen(true)} />
 
+            <div className="flex flex-col gap-2">
+                <Button
+                    variant="secondary"
+                    onClick={() => {
+                        setPasswordChanged(false);
+                        setPasswordOpen(true);
+                    }}
+                >
+                    <KeyRound className="size-4" aria-hidden="true" />
+                    Cambiar contraseña
+                </Button>
+                {passwordChanged && (
+                    <p role="status" className="text-lime text-center text-[13px]">
+                        Contraseña cambiada.
+                    </p>
+                )}
+            </div>
+
             <Button variant="danger" onClick={logout}>
                 Cerrar sesión
             </Button>
@@ -45,6 +66,12 @@ export function ProfilePage() {
             </button>
 
             <InstallGuideSheet open={guideOpen} onClose={() => setGuideOpen(false)} />
+
+            <ChangePasswordSheet
+                open={passwordOpen}
+                onClose={() => setPasswordOpen(false)}
+                onChanged={() => setPasswordChanged(true)}
+            />
         </main>
     );
 }

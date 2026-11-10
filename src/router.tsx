@@ -32,6 +32,13 @@ export const router = createBrowserRouter([
                                 Component: m.VerifyEmailPage,
                             })),
                     },
+                    {
+                        path: '/recuperar',
+                        lazy: () =>
+                            import('./pages/ForgotPasswordPage').then((m) => ({
+                                Component: m.ForgotPasswordPage,
+                            })),
+                    },
                 ],
             },
             {

@@ -7,6 +7,7 @@ import { authStore } from './authStore';
 type LoginRequest = components['schemas']['LoginRequest'];
 type RegisterRequest = components['schemas']['RegisterRequest'];
 type VerifyEmailRequest = components['schemas']['VerifyEmailRequest'];
+type PasswordResetConfirmRequest = components['schemas']['PasswordResetConfirmRequest'];
 
 async function login(body: LoginRequest): Promise<string> {
     const { data, error, response } = await api.POST('/api/auth/login', { body });
@@ -64,6 +65,40 @@ export function useResendVerificationCode() {
             if (error || !response.ok) {
                 throw toApiError(error, response);
             }
+        },
+    });
+}
+
+/** Envía un código al correo para cambiar la contraseña. Responde igual aunque el email no exista. */
+export function useRequestPasswordReset() {
+    return useMutation({
+        mutationFn: async (email: string) => {
+            const { error, response } = await api.POST('/api/auth/password-reset', {
+                body: { email },
+            });
+            if (error || !response.ok) {
+                throw toApiError(error, response);
+            }
+        },
+    });
+}
+
+/** Cambia la contraseña con el código y entra directamente con el token que devuelve el backend. */
+export function useConfirmPasswordReset() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (body: PasswordResetConfirmRequest) => {
+            const { data, error, response } = await api.POST('/api/auth/password-reset/confirm', {
+                body,
+            });
+            if (error || !data?.accessToken) {
+                throw toApiError(error, response);
+            }
+            return data.accessToken;
+        },
+        onSuccess: (token) => {
+            queryClient.clear();
+            authStore.setToken(token);
         },
     });
 }
