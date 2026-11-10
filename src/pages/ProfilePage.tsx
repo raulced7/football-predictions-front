@@ -3,10 +3,14 @@ import { getErrorMessage } from '../api/errors';
 import { useLogout } from '../features/auth/api';
 import { useMe } from '../features/users/api';
 import { InstallCard } from '../features/pwa/InstallCard';
+import { useState } from 'react';
+import { CircleHelp } from 'lucide-react';
+import { InstallGuideSheet } from '../features/pwa/InstallGuideSheet';
 
 export function ProfilePage() {
     const me = useMe();
     const logout = useLogout();
+    const [guideOpen, setGuideOpen] = useState(false);
 
     return (
         <main className="flex flex-col gap-6 px-5 pt-7">
@@ -25,11 +29,22 @@ export function ProfilePage() {
                 )}
             </section>
 
-            <InstallCard />
+            <InstallCard onShowGuide={() => setGuideOpen(true)} />
 
             <Button variant="danger" onClick={logout}>
                 Cerrar sesión
             </Button>
+
+            <button
+                type="button"
+                onClick={() => setGuideOpen(true)}
+                className="text-muted hover:text-fg mx-auto flex items-center gap-1.5 py-2 text-[13px]"
+            >
+                <CircleHelp className="size-4" aria-hidden="true" />
+                Cómo añadir la app a la pantalla de inicio
+            </button>
+
+            <InstallGuideSheet open={guideOpen} onClose={() => setGuideOpen(false)} />
         </main>
     );
 }

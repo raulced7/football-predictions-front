@@ -1,8 +1,8 @@
-import { Download, Share } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { Button } from '../../components/Buttons';
 import { useInstallPrompt } from './useInstallPrompt';
 
-export function InstallCard() {
+export function InstallCard({ onShowGuide }: { onShowGuide: () => void }) {
     const installPrompt = useInstallPrompt();
 
     if (installPrompt.mode === 'installed' || installPrompt.mode === 'unavailable') return null;
@@ -29,12 +29,9 @@ export function InstallCard() {
             {installPrompt.mode === 'prompt' ? (
                 <Button onClick={() => void installPrompt.install()}>Instalar</Button>
             ) : (
-                <p className="text-muted text-sm leading-relaxed">
-                    En Safari, toca{' '}
-                    <Share className="text-fg inline size-4 align-[-3px]" aria-label="Compartir" />{' '}
-                    y después{' '}
-                    <span className="text-fg font-semibold">«Añadir a pantalla de inicio»</span>.
-                </p>
+                <Button variant="secondary" onClick={onShowGuide}>
+                    Ver cómo instalarla
+                </Button>
             )}
         </section>
     );

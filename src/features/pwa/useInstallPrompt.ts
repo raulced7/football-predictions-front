@@ -5,7 +5,7 @@ interface BeforeInstallPromptEvent extends Event {
     userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
-function isStandalone() {
+export function isStandalone() {
     return (
         window.matchMedia('(display-mode: standalone)').matches ||
         // Safari en iOS
@@ -13,7 +13,7 @@ function isStandalone() {
     );
 }
 
-function isIos() {
+export function isIos() {
     return /iphone|ipad|ipod/i.test(navigator.userAgent);
 }
 
