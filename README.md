@@ -10,7 +10,7 @@ Mobile-first web app for **football prediction games between friends**: predict 
 create a private group, invite your friends with a link and follow the standings round by round.
 It is an installable PWA built on top of the [Football Predictions API](https://github.com/raulced7/football-predictions).
 
-**Live:** https://web-production-2053c.up.railway.app/
+**Live:** https://golifyapp.com/
 
 <p align="center">
   <img src="docs/screenshots/round.png" alt="My round" width="240">
