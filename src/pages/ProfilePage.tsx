@@ -27,8 +27,6 @@ export function ProfilePage() {
 
             <InstallCard />
 
-            <Button variant="danger" onClick={logout}></Button>
-
             <Button variant="danger" onClick={logout}>
                 Cerrar sesión
             </Button>
