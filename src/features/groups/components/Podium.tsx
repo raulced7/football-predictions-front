@@ -28,6 +28,7 @@ export function Podium({ entries, myUserId }: PodiumProps) {
                         {isFirst && <Crown className="text-lime size-5.5" aria-hidden="true" />}
                         <Avatar
                             name={entry.displayName}
+                            imageUrl={entry.avatarUrl}
                             size={isFirst ? 'lg' : 'md'}
                             highlighted={isMe}
                         />

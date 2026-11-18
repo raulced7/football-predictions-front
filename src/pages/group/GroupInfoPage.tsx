@@ -6,7 +6,7 @@ import { getErrorMessage } from '../../api/errors';
 import { useAuth } from '../../features/auth/useAuth';
 import { useDeleteGroup, useGroup, useLeaveGroup } from '../../features/groups/api';
 import { InviteCodeCard } from '../../features/groups/components/InviteCodeCard';
-import { initials } from '../../features/groups/model';
+import { Avatar } from '../../features/groups/components/Avatar';
 
 const joinedFormatter = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'short' });
 
@@ -48,14 +48,11 @@ export function GroupInfoPage() {
                                 key={member.userId}
                                 className="border-line-soft flex items-center gap-3 border-b px-3.5 py-3 last:border-b-0"
                             >
-                                <span
-                                    aria-hidden="true"
-                                    className={`bg-surface-2 flex size-9 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
-                                        isMe ? 'border-lime border-2' : ''
-                                    }`}
-                                >
-                                    {initials(member.displayName)}
-                                </span>
+                                <Avatar
+                                    name={member.displayName}
+                                    imageUrl={member.avatarUrl}
+                                    highlighted={isMe}
+                                />
                                 <span className="flex min-w-0 grow flex-col gap-0.5">
                                     <span className="truncate text-[15px] font-semibold">
                                         {member.displayName}

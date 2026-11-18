@@ -30,7 +30,11 @@ export function StandingsList({ entries, myUserId, label }: StandingsListProps) 
                         <span className="font-display text-muted text-center text-base font-bold">
                             {entry.position}
                         </span>
-                        <Avatar name={entry.displayName} highlighted={isMe} />
+                        <Avatar
+                            name={entry.displayName}
+                            imageUrl={entry.avatarUrl}
+                            highlighted={isMe}
+                        />
                         <span className="flex min-w-0 flex-col gap-0.5">
                             <span className="truncate text-[15px] font-semibold">
                                 {entry.displayName}

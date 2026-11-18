@@ -21,6 +21,7 @@ export interface Group {
 export interface GroupMember {
     userId: number;
     displayName: string;
+    avatarUrl: string | null;
     joinedAt: Date | null;
 }
 
@@ -28,6 +29,7 @@ export interface StandingEntry {
     position: number;
     userId: number;
     displayName: string;
+    avatarUrl: string | null;
     points: number;
     exactHits: number;
 }
@@ -55,6 +57,7 @@ export function toGroupDetail(response: GroupDetailResponse): {
         members: (response.members ?? []).map((member) => ({
             userId: member.userId ?? 0,
             displayName: member.displayName ?? '',
+            avatarUrl: member.avatarUrl ?? null,
             joinedAt: member.joinedAt ? new Date(member.joinedAt) : null,
         })),
     };
@@ -65,6 +68,7 @@ export function toStandings(list: StandingEntryResponse[]): StandingEntry[] {
         position: entry.position ?? 0,
         userId: entry.userId ?? 0,
         displayName: entry.displayName ?? '',
+        avatarUrl: entry.avatarUrl ?? null,
         points: entry.points ?? 0,
         exactHits: entry.exactHits ?? 0,
     }));

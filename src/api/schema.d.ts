@@ -4,6 +4,22 @@
  */
 
 export interface paths {
+    "/api/users/me/avatar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["uploadAvatar"];
+        delete: operations["removeAvatar"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/users/me/password": {
         parameters: {
             query?: never;
@@ -286,7 +302,7 @@ export interface paths {
         get: operations["me"];
         put?: never;
         post?: never;
-        delete?: never;
+        delete: operations["deleteAccount"];
         options?: never;
         head?: never;
         patch?: never;
@@ -566,6 +582,10 @@ export interface components {
             id?: number;
             email?: string;
             displayName?: string;
+            avatarUrl?: string;
+        };
+        DeleteAccountRequest: {
+            password: string;
         };
         PasswordResetRequest: {
             /** Format: email */
@@ -633,6 +653,7 @@ export interface components {
             /** Format: int64 */
             userId?: number;
             displayName?: string;
+            avatarUrl?: string;
             /** Format: date-time */
             joinedAt?: string;
         };
@@ -642,6 +663,7 @@ export interface components {
             /** Format: int64 */
             userId?: number;
             displayName?: string;
+            avatarUrl?: string;
             /** Format: int32 */
             points?: number;
             /** Format: int32 */
@@ -677,6 +699,73 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    uploadAvatar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["UserResponse"];
+                };
+            };
+        };
+    };
+    removeAvatar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    deleteAccount: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeleteAccountRequest"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     changePassword: {
         parameters: {
             query?: never;
