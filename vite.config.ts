@@ -32,6 +32,8 @@ export default defineConfig({
                 navigateFallback: '/index.html',
                 navigateFallbackDenylist: [/^\/api\//],
                 cleanupOutdatedCaches: true,
+                // Notificaciones: el código que recibe los avisos y los muestra
+                importScripts: ['/push-sw.js'],
             },
         }),
     ],

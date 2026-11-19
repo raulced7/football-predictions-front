@@ -6,6 +6,7 @@ import { Avatar } from '../features/groups/components/Avatar';
 import { AvatarEditorSheet } from '../features/users/components/AvatarEditorSheet';
 import { DeleteAccountSheet } from '../features/users/components/DeleteAccountSheet';
 import { InstallCard } from '../features/pwa/InstallCard';
+import { PushSetting } from '../features/notifications/PushSetting';
 import { useRef, useState } from 'react';
 import { Camera, CircleHelp, KeyRound, Trash2 } from 'lucide-react';
 import { InstallGuideSheet } from '../features/pwa/InstallGuideSheet';
@@ -108,6 +109,8 @@ export function ProfilePage() {
 
             <InstallCard onShowGuide={() => setGuideOpen(true)} />
 
+            <PushSetting />
+
             <div className="flex flex-col gap-2">
                 <Button
                     variant="secondary"
@@ -126,7 +129,7 @@ export function ProfilePage() {
                 )}
             </div>
 
-            <Button variant="danger" onClick={logout}>
+            <Button variant="danger" onClick={() => void logout()}>
                 Cerrar sesión
             </Button>
 

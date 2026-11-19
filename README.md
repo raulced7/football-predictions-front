@@ -26,6 +26,7 @@ It is an installable PWA built on top of the [Football Predictions API](https://
 - **Group predictions:** see everyone's predictions once a match has started; before that, only how many have predicted
 - **Installable PWA:** home screen icon, fast start-up, update prompt for new versions and an install guide for Android and iPhone
 - **Real crests** for every team, with a fallback to the team's abbreviation
+- **Push notifications:** a reminder before each round if you have matches left to predict, and a summary with your points when it ends. On iPhone they need the app on the home screen, so the app tells the user how to install it
 - **Profile:** photo upload with an in-browser crop editor (resized before upload), password change and account deletion
 
 ## Tech stack

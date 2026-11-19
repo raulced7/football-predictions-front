@@ -7,6 +7,7 @@ import { RoundSummary } from '../features/rounds/components/RoundSummary';
 import { dayKey, formatDateRange, formatDay } from '../features/rounds/format';
 import type { Match } from '../features/rounds/model';
 import { useSelectedRound } from '../features/rounds/useSelectedRound';
+import { PushCard } from '../features/notifications/PushCard';
 
 export function RoundPage() {
     const seasons = useOpenSeasons();
@@ -73,6 +74,7 @@ export function RoundPage() {
             </header>
 
             <main className="flex flex-col gap-2.5 px-5 pb-6">
+                <PushCard />
                 {matches.isError && (
                     <ErrorState
                         message={getErrorMessage(matches.error)}

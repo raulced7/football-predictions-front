@@ -3,6 +3,7 @@ import { api } from '../../api/client';
 import { toApiError } from '../../api/errors';
 import type { components } from '../../api/schema';
 import { authStore } from './authStore';
+import { disablePush } from '../notifications/push';
 
 type LoginRequest = components['schemas']['LoginRequest'];
 type RegisterRequest = components['schemas']['RegisterRequest'];
@@ -105,7 +106,12 @@ export function useConfirmPasswordReset() {
 
 export function useLogout() {
     const queryClient = useQueryClient();
-    return () => {
+    return async () => {
+        // Este dispositivo deja de recibir los avisos de quien cierra sesión (sin esperar más de 3 s)
+        await Promise.race([
+            disablePush().catch(() => undefined),
+            new Promise((resolve) => setTimeout(resolve, 3000)),
+        ]);
         authStore.clear();
         queryClient.clear();
     };

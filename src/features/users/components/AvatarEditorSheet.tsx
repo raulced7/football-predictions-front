@@ -45,7 +45,7 @@ export function AvatarEditorSheet({ imageSrc, onClose }: AvatarEditorSheetProps)
     return (
         <Sheet open={imageSrc !== null} onClose={close} title="Tu foto">
             {imageSrc && (
-                <div className="bg-bg relative aspect-square w-full overflow-hidden rounded-2xl">
+                <div className="bg-ink relative aspect-square w-full overflow-hidden rounded-2xl">
                     <Cropper
                         image={imageSrc}
                         crop={crop}

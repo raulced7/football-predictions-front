@@ -3,6 +3,7 @@ import { api } from '../../api/client';
 import { toApiError } from '../../api/errors';
 import type { components } from '../../api/schema';
 import { authStore } from '../auth/authStore';
+import { currentSubscription } from '../notifications/push';
 
 export function useMe() {
     return useQuery({
@@ -86,6 +87,8 @@ export function useDeleteAccount() {
             }
         },
         onSuccess: () => {
+            // El servidor ya ha borrado sus dispositivos; aquí solo falta olvidar la suscripción del navegador
+            void currentSubscription().then((subscription) => subscription?.unsubscribe());
             authStore.clear();
             queryClient.clear();
         },

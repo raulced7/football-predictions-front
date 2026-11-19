@@ -4,22 +4,6 @@
  */
 
 export interface paths {
-    "/api/users/me/avatar": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["uploadAvatar"];
-        delete: operations["removeAvatar"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/users/me/password": {
         parameters: {
             query?: never;
@@ -31,6 +15,22 @@ export interface paths {
         put: operations["changePassword"];
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/push/subscriptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["subscribe"];
+        post?: never;
+        delete: operations["unsubscribe"];
         options?: never;
         head?: never;
         patch?: never;
@@ -79,6 +79,22 @@ export interface paths {
         put: operations["setResult"];
         post?: never;
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/me/avatar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["upload"];
+        delete: operations["remove"];
         options?: never;
         head?: never;
         patch?: never;
@@ -372,6 +388,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/push/config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["config"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/groups/{groupId}": {
         parameters: {
             query?: never;
@@ -468,6 +500,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/users/{userId}/avatar": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["removeAsAdmin"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -475,6 +523,14 @@ export interface components {
         ChangePasswordRequest: {
             currentPassword: string;
             newPassword: string;
+        };
+        Keys: {
+            p256dh: string;
+            auth: string;
+        };
+        PushSubscriptionRequest: {
+            endpoint: string;
+            keys: components["schemas"]["Keys"];
         };
         PredictionRequest: {
             /** Format: int32 */
@@ -533,6 +589,13 @@ export interface components {
             /** Format: int32 */
             awayGoals: number;
         };
+        UserResponse: {
+            /** Format: int64 */
+            id?: number;
+            email?: string;
+            displayName?: string;
+            avatarUrl?: string;
+        };
         CreateGroupRequest: {
             name: string;
             /** Format: int64 */
@@ -575,16 +638,6 @@ export interface components {
             /** Format: email */
             email: string;
             displayName: string;
-            password: string;
-        };
-        UserResponse: {
-            /** Format: int64 */
-            id?: number;
-            email?: string;
-            displayName?: string;
-            avatarUrl?: string;
-        };
-        DeleteAccountRequest: {
             password: string;
         };
         PasswordResetRequest: {
@@ -645,6 +698,10 @@ export interface components {
             open?: boolean;
             prediction?: components["schemas"]["PredictionResponse"];
         };
+        PushConfigResponse: {
+            enabled?: boolean;
+            publicKey?: string;
+        };
         GroupDetailResponse: {
             group?: components["schemas"]["GroupResponse"];
             members?: components["schemas"]["GroupMemberResponse"][];
@@ -690,6 +747,12 @@ export interface components {
         DisplayNameAvailability: {
             available?: boolean;
         };
+        DeleteAccountRequest: {
+            password: string;
+        };
+        PushUnsubscribeRequest: {
+            endpoint: string;
+        };
     };
     responses: never;
     parameters: never;
@@ -699,73 +762,6 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    uploadAvatar: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "multipart/form-data": {
-                    /** Format: binary */
-                    file: string;
-                };
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["UserResponse"];
-                };
-            };
-        };
-    };
-    removeAvatar: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    deleteAccount: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DeleteAccountRequest"];
-            };
-        };
-        responses: {
-            /** @description No Content */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
     changePassword: {
         parameters: {
             query?: never;
@@ -776,6 +772,50 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["ChangePasswordRequest"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    subscribe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PushSubscriptionRequest"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    unsubscribe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PushUnsubscribeRequest"];
             };
         };
         responses: {
@@ -863,6 +903,51 @@ export interface operations {
                 content: {
                     "*/*": components["schemas"]["FixtureResponse"];
                 };
+            };
+        };
+    };
+    upload: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["UserResponse"];
+                };
+            };
+        };
+    };
+    remove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -1206,6 +1291,28 @@ export interface operations {
             };
         };
     };
+    deleteAccount: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeleteAccountRequest"];
+            };
+        };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     findOpenSeasons: {
         parameters: {
             query?: never;
@@ -1288,6 +1395,26 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["FixtureResponse"][];
+                };
+            };
+        };
+    };
+    config: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PushConfigResponse"];
                 };
             };
         };
@@ -1430,6 +1557,26 @@ export interface operations {
             header?: never;
             path: {
                 groupId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    removeAsAdmin: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                userId: number;
             };
             cookie?: never;
         };

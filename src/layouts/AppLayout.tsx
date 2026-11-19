@@ -2,9 +2,11 @@ import { Outlet } from 'react-router';
 import { BottomNav } from '../components/BottomNav';
 import { InstallGuideSheet } from '../features/pwa/InstallGuideSheet';
 import { useFirstTimeInstallGuide } from '../features/pwa/useFirstTimeInstallGuide';
+import { usePushSync } from '../features/notifications/usePushSync';
 
 export function AppLayout() {
     const installGuide = useFirstTimeInstallGuide();
+    usePushSync();
 
     return (
         <div className="mx-auto min-h-dvh max-w-md pb-[calc(4rem+env(safe-area-inset-bottom))]">
